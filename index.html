@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ماه - پیام‌رسان برنامه‌نویسان</title>
+    <title>پیام‌رسان ماه</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <style>
         * {
             margin: 0;
@@ -344,7 +345,7 @@
             flex-wrap: wrap;
         }
         
-        .open-code-btn, .run-code-btn, .share-code-btn, .save-code-btn {
+        .open-code-btn, .run-code-btn, .share-code-btn, .save-code-btn, .reply-btn, .react-btn {
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
             border: none;
@@ -370,7 +371,16 @@
             background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
         }
         
-        .open-code-btn:hover, .run-code-btn:hover, .share-code-btn:hover, .save-code-btn:hover {
+        .reply-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+        
+        .react-btn {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+        
+        .open-code-btn:hover, .run-code-btn:hover, .share-code-btn:hover, 
+        .save-code-btn:hover, .reply-btn:hover, .react-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         }
@@ -430,41 +440,9 @@
 
         .code-content {
             background: #000;
-            padding: 0;
+            padding: 20px;
             max-height: 70vh;
             overflow: auto;
-        }
-
-        .code-line {
-            display: flex;
-            border-bottom: 1px solid #222;
-            transition: background 0.2s;
-        }
-
-        .code-line:hover {
-            background: #1a1a1a;
-        }
-
-        .line-number {
-            color: #666;
-            min-width: 60px;
-            text-align: right;
-            padding: 8px 15px;
-            background: #111;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            user-select: none;
-            border-right: 1px solid #333;
-        }
-
-        .line-content {
-            flex: 1;
-            padding: 8px 15px;
-            color: #f8f8f8;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            white-space: pre;
-            background: #000;
         }
 
         .code-actions {
@@ -519,31 +497,6 @@
             display: none;
         }
         
-        /* ویژگی‌های جدید */
-        .feature-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid #a0a0ff;
-        }
-        
-        .feature-title {
-            color: #a0a0ff;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .feature-desc {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.5;
-        }
-        
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -576,6 +529,151 @@
             padding: 12px;
             margin-bottom: 10px;
             font-size: 13px;
+        }
+        
+        /* ویژگی‌های جدید */
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .search-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px;
+            font-size: 14px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .reaction-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .reaction-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 4px 8px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .reaction-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .reply-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .reply-message {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            border-right: 3px solid #3498db;
+        }
+        
+        .file-upload {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .file-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-name {
+            font-size: 12px;
+            color: #a0a0ff;
+        }
+        
+        .file-size {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .online-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #27ae60;
+            border-radius: 50%;
+            margin-left: 5px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .typing-indicator {
+            color: #a0a0ff;
+            font-size: 12px;
+            font-style: italic;
+            padding: 5px 0;
         }
         
         @media (max-width: 1200px) {
@@ -620,9 +718,28 @@
             z-index: 1001;
             animation: slideIn 0.3s ease-out;
         }
+        
+        /* استایل‌های Prism */
+        .code-block {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
+    <!-- دکمه تغییر تم -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+    
     <!-- زمینه ستاره‌دار -->
     <div class="stars" id="stars"></div>
     
@@ -633,47 +750,17 @@
                 <div class="moon"></div>
             </div>
             <div class="moon-title">ماه</div>
-            <div class="tagline">پیام‌رسان تخصصی برنامه‌نویسان</div>
+            <div class="tagline">پیام‌رسان آنلاین</div>
         </div>
         
         <!-- محتوای اصلی -->
         <div class="content">
-            <!-- سایدبار سمت راست - ویژگی‌ها -->
+            <!-- سایدبار سمت راست - دستگاه‌های فعال -->
             <div class="sidebar">
                 <h3 style="margin-bottom: 15px; color: #a0a0ff;">
-                    <i class="fas fa-star" style="margin-left: 8px;"></i>
-                    ویژگی‌های ماه
+                    <i class="fas fa-laptop" style="margin-left: 8px;"></i>
+                    دستگاه‌های فعال
                 </h3>
-                
-                <div class="feature-card">
-                    <div class="feature-title">
-                        <i class="fas fa-code"></i>
-                        تشخیص خودکار کد
-                    </div>
-                    <div class="feature-desc">
-                        پیام‌های بالای ۵۰ خط به صورت خودکار به عنوان کد شناسایی و فرمت می‌شوند
-                    </div>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-title">
-                        <i class="fas fa-play-circle"></i>
-                        اجرای کد آنلاین
-                    </div>
-                    <div class="feature-desc">
-                        قابلیت اجرای کدهای پایتون، جاوااسکریپت و سایر زبان‌ها به صورت مستقیم
-                    </div>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-title">
-                        <i class="fas fa-share-alt"></i>
-                        اشتراک‌گذاری کد
-                    </div>
-                    <div class="feature-desc">
-                        تولید لینک اختصاصی برای هر قطعه کد و اشتراک‌گذاری آسان
-                    </div>
-                </div>
                 
                 <div class="stats-grid">
                     <div class="stat-item">
@@ -696,8 +783,8 @@
                 
                 <div class="active-devices">
                     <h4 style="margin: 20px 0 10px; color: #a0a0ff;">
-                        <i class="fas fa-laptop" style="margin-left: 8px;"></i>
-                        برنامه‌نویسان آنلاین
+                        <i class="fas fa-users" style="margin-left: 8px;"></i>
+                        کاربران آنلاین <span class="online-indicator"></span>
                     </h4>
                     <div id="devicesList">
                         <div class="loading">
@@ -705,6 +792,10 @@
                             در حال بارگذاری...
                         </div>
                     </div>
+                </div>
+                
+                <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                    <i class="fas fa-pencil-alt"></i> در حال تایپ...
                 </div>
                 
                 <div class="refresh-info">
@@ -715,16 +806,21 @@
             
             <!-- بخش مرکزی - پیام‌ها -->
             <div class="messages-container" id="messagesContainer">
-                <h3 style="margin-bottom: 15px; color: #a0a0ff;">
-                    <i class="fas fa-comments" style="margin-left: 8px;"></i>
-                    پیام‌ها و کدها
-                </h3>
+                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="color: #a0a0ff;">
+                        <i class="fas fa-comments" style="margin-left: 8px;"></i>
+                        پیام‌ها
+                    </h3>
+                    <div class="search-box">
+                        <input type="text" class="search-input" id="searchInput" placeholder="جستجو در پیام‌ها...">
+                    </div>
+                </div>
                 
                 <div id="messagesList">
                     <div class="empty-state">
-                        <i class="fas fa-code-branch" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                        <i class="fas fa-comment" style="font-size: 3rem; margin-bottom: 15px;"></i>
                         <p>هنوز پیامی ارسال نشده است</p>
-                        <p style="font-size: 14px; margin-top: 10px;">اولین نفری باشید که کد به اشتراک می‌گذارد!</p>
+                        <p style="font-size: 14px; margin-top: 10px;">اولین پیام را ارسال کنید!</p>
                     </div>
                 </div>
             </div>
@@ -733,34 +829,42 @@
             <div class="message-form">
                 <h3 style="margin-bottom: 15px; color: #a0a0ff;">
                     <i class="fas fa-paper-plane" style="margin-left: 8px;"></i>
-                    ارسال پیام/کد
+                    ارسال پیام
                 </h3>
+                
+                <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                    <div>برای آپلود فایل کلیک کنید</div>
+                    <small>حداکثر سایز: 5MB</small>
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(this.files)">
+                </div>
+                
+                <div id="uploadedFiles"></div>
                 
                 <form id="messageForm">
                     <div class="form-group">
                         <label for="message">
-                            <i class="fas fa-terminal" style="margin-left: 5px;"></i>
-                            کد یا پیام شما:
+                            <i class="fas fa-edit" style="margin-left: 5px;"></i>
+                            پیام شما:
                         </label>
                         <textarea 
                             id="message"
                             name="message" 
-                            placeholder='// کد خود را اینجا بنویسید...
-// یا پیام متنی ارسال کنید
-
-print("Hello, Moon!")'
+                            placeholder="پیام خود را اینجا بنویسید..."
                             required
+                            oninput="handleTyping()"
                         ></textarea>
                     </div>
                     <button type="submit" class="btn-send">
                         <i class="fas fa-paper-plane" style="margin-left: 8px;"></i>
-                        ارسال به ماه
+                        ارسال پیام
                     </button>
                 </form>
                 
                 <div style="margin-top: 15px; font-size: 12px; color: #a0a0ff;">
-                    <i class="fas fa-user-astronaut" style="margin-left: 5px;"></i>
-                    شما: برنامه‌نویس <span id="myDeviceId">1</span>
+                    <i class="fas fa-user" style="margin-left: 5px;"></i>
+                    شما: کاربر <span id="myDeviceId">1</span>
+                    <span class="online-indicator"></span>
                 </div>
                 
                 <div class="saved-codes">
@@ -779,9 +883,9 @@ print("Hello, Moon!")'
         
         <!-- فوتر -->
         <div class="footer">
-            <div style="font-size: 1.1rem; margin-bottom: 10px; color: #a0a0ff;">ماه - پیام‌رسان برنامه‌نویسان</div>
+            <div style="font-size: 1.1rem; margin-bottom: 10px; color: #a0a0ff;">پیام‌رسان ماه</div>
             <div class="designer-box">
-                <i class="fas fa-rocket" style="margin-left: 8px;"></i>
+                <i class="fas fa-palette" style="margin-left: 8px;"></i>
                 طراح: طاها فرهیخته
             </div>
         </div>
@@ -791,16 +895,15 @@ print("Hello, Moon!")'
     <div id="codeModal" class="code-modal">
         <div class="code-container">
             <div class="code-header">
-                <div class="code-title" id="codeTitle">نمایش کد برنامه‌نویسی</div>
+                <div class="code-title" id="codeTitle">نمایش کد</div>
                 <button class="code-close" onclick="closeCodeModal()">
                     <i class="fas fa-times" style="margin-left: 5px;"></i>
                     بستن
                 </button>
             </div>
             <div class="code-content" id="codeContent">
-                <div class="code-line">
-                    <div class="line-number">1</div>
-                    <div class="line-content">// کد شما اینجا نمایش داده خواهد شد</div>
+                <div class="code-block">
+                    <pre><code class="language-javascript" id="codeElement">// کد شما اینجا نمایش داده خواهد شد</code></pre>
                 </div>
             </div>
             <div class="code-actions">
@@ -821,11 +924,19 @@ print("Hello, Moon!")'
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
     <script>
         // داده‌های جهانی
         let messagesData = [];
         let currentCodeId = null;
         let myDeviceId = null;
+        let userCounter = 1;
+        let currentTheme = 'dark';
+        let typingTimer = null;
+        let uploadedFiles = [];
         
         // ایجاد ستاره‌های متحرک
         function createStars() {
@@ -851,11 +962,6 @@ print("Hello, Moon!")'
             }
         }
         
-        // تولید شناسه دستگاه
-        function generateDeviceId() {
-            return 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
-        }
-        
         // نمایش نوتیفیکیشن
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
@@ -873,23 +979,123 @@ print("Hello, Moon!")'
             }, 3000);
         }
         
+        // تغییر تم
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            const themeIcon = document.querySelector('.theme-toggle i');
+            
+            if (currentTheme === 'light') {
+                document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                document.body.style.filter = 'none';
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+        
+        // تشخیص کد بر اساس محتوا
+        function detectCode(messageText) {
+            const codePatterns = [
+                /function\s+\w+\s*\([^)]*\)\s*\{/,
+                /class\s+\w+/,
+                /def\s+\w+\s*\([^)]*\):/,
+                /import\s+\w+/,
+                /console\.log\(/,
+                /print\(/,
+                /if\s*\([^)]*\)\s*\{/,
+                /for\s*\([^)]*\)\s*\{/,
+                /while\s*\([^)]*\)\s*\{/,
+                /const\s+\w+\s*=/,
+                /let\s+\w+\s*=/,
+                /var\s+\w+\s*=/,
+                /<\/?[a-z][\s\S]*>/i,
+                /\/\//,
+                /\/\*[\s\S]*\*\//,
+                /#include/,
+                /public\s+class/,
+                /private\s+\w+/,
+                /protected\s+\w+/
+            ];
+            
+            for (let pattern of codePatterns) {
+                if (pattern.test(messageText)) {
+                    return true;
+                }
+            }
+            
+            const lines = messageText.split('\n');
+            let codeLineCount = 0;
+            
+            for (let line of lines) {
+                const trimmedLine = line.trim();
+                if (trimmedLine.length > 0) {
+                    if (trimmedLine.endsWith(';') || 
+                        trimmedLine.endsWith('{') || 
+                        trimmedLine.endsWith('}') ||
+                        trimmedLine.endsWith(')') ||
+                        /^\s*[\w]+\s*\([^)]*\)\s*$/.test(trimmedLine)) {
+                        codeLineCount++;
+                    }
+                }
+            }
+            
+            return codeLineCount / lines.length > 0.3 && lines.length > 2;
+        }
+        
+        // تشخیص زبان کد
+        function detectLanguage(messageText) {
+            if (messageText.includes('def ') || messageText.includes('import ') || messageText.includes('print(')) {
+                return 'python';
+            } else if (messageText.includes('function ') || messageText.includes('const ') || messageText.includes('let ')) {
+                return 'javascript';
+            } else if (messageText.includes('<html') || messageText.includes('<div') || messageText.includes('</')) {
+                return 'html';
+            } else if (messageText.includes('#include') || messageText.includes('int main')) {
+                return 'cpp';
+            } else if (messageText.includes('public class') || messageText.includes('System.out')) {
+                return 'java';
+            } else {
+                return 'javascript';
+            }
+        }
+        
         // ثبت دستگاه فعال
         function registerDevice() {
             if (!myDeviceId) return;
             
             const deviceData = {
                 device_id: myDeviceId,
-                username: `Programmer${myDeviceId.substr(-4)}`,
-                timestamp: Date.now()
+                username: `کاربر ${userCounter}`,
+                timestamp: Date.now(),
+                isTyping: false
             };
             
-            // ذخیره در localStorage برای شبیه‌سازی
             localStorage.setItem('moon_active_devices', JSON.stringify({
                 ...JSON.parse(localStorage.getItem('moon_active_devices') || '{}'),
                 [myDeviceId]: deviceData
             }));
+        }
+        
+        // نشان دادن وضعیت تایپ
+        function setTypingStatus(isTyping) {
+            if (!myDeviceId) return;
             
-            console.log('📱 دستگاه ثبت شد:', myDeviceId);
+            const devices = JSON.parse(localStorage.getItem('moon_active_devices') || '{}');
+            if (devices[myDeviceId]) {
+                devices[myDeviceId].isTyping = isTyping;
+                devices[myDeviceId].timestamp = Date.now();
+                localStorage.setItem('moon_active_devices', JSON.stringify(devices));
+            }
+        }
+        
+        // مدیریت تایپ
+        function handleTyping() {
+            setTypingStatus(true);
+            
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                setTypingStatus(false);
+            }, 1000);
         }
         
         // دریافت دستگاه‌های فعال
@@ -897,43 +1103,37 @@ print("Hello, Moon!")'
             const devices = JSON.parse(localStorage.getItem('moon_active_devices') || '{}');
             const now = Date.now();
             const activeDevices = {};
+            let someoneTyping = false;
             
-            // حذف دستگاه‌های غیرفعال (بیش از 2 دقیقه)
             for (const [deviceId, deviceInfo] of Object.entries(devices)) {
-                if (now - deviceInfo.timestamp < 120000) { // 2 دقیقه
+                if (now - deviceInfo.timestamp < 120000) {
                     activeDevices[deviceId] = {
                         ...deviceInfo,
                         time: new Date(deviceInfo.timestamp).toLocaleTimeString('fa-IR')
                     };
+                    
+                    if (deviceInfo.isTyping && deviceId !== myDeviceId) {
+                        someoneTyping = true;
+                    }
                 }
             }
             
-            // به‌روزرسانی localStorage
-            localStorage.setItem('moon_active_devices', JSON.stringify(activeDevices));
+            // نمایش وضعیت تایپ
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.style.display = someoneTyping ? 'block' : 'none';
             
+            localStorage.setItem('moon_active_devices', JSON.stringify(activeDevices));
             return activeDevices;
         }
         
         // ذخیره پیام
-        function saveMessage(messageText, deviceId) {
+        function saveMessage(messageText, deviceId, files = []) {
             const messages = JSON.parse(localStorage.getItem('moon_messages') || '[]');
             const now = new Date();
             
+            const isCode = detectCode(messageText);
+            const language = isCode ? detectLanguage(messageText) : 'text';
             const lineCount = messageText.split('\n').length;
-            const isCode = lineCount >= 50;
-            let language = 'text';
-            
-            if (isCode) {
-                if (messageText.includes('def ') || messageText.includes('import ') || messageText.includes('print(')) {
-                    language = 'python';
-                } else if (messageText.includes('function ') || messageText.includes('const ') || messageText.includes('let ')) {
-                    language = 'javascript';
-                } else if (messageText.includes('<html') || messageText.includes('<div')) {
-                    language = 'html';
-                } else {
-                    language = 'code';
-                }
-            }
             
             const newMessage = {
                 id: messages.length,
@@ -944,7 +1144,10 @@ print("Hello, Moon!")'
                 char_count: messageText.length,
                 is_code: isCode,
                 language: language,
-                timestamp: now.getTime()
+                timestamp: now.getTime(),
+                files: files,
+                reactions: {},
+                replies: []
             };
             
             messages.push(newMessage);
@@ -958,10 +1161,9 @@ print("Hello, Moon!")'
             const messages = JSON.parse(localStorage.getItem('moon_messages') || '[]');
             const now = Date.now();
             
-            // فقط پیام‌های 24 ساعت اخیر
             const recentMessages = messages.filter(msg => now - msg.timestamp < 24 * 60 * 60 * 1000);
             
-            return recentMessages.slice(-30); // آخرین 30 پیام
+            return recentMessages.slice(-50);
         }
         
         // دریافت آمار
@@ -978,14 +1180,129 @@ print("Hello, Moon!")'
             };
         }
         
+        // جستجو در پیام‌ها
+        function searchMessages(query) {
+            const messages = getMessages();
+            return messages.filter(msg => 
+                msg.text.toLowerCase().includes(query.toLowerCase()) ||
+                (msg.files && msg.files.some(file => file.name.toLowerCase().includes(query.toLowerCase())))
+            );
+        }
+        
+        // مدیریت آپلود فایل
+        function handleFileUpload(files) {
+            for (let file of files) {
+                if (file.size > 5 * 1024 * 1024) {
+                    showNotification('حجم فایل باید کمتر از 5MB باشد!', 'error');
+                    continue;
+                }
+                
+                const fileData = {
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    type: file.type,
+                    url: URL.createObjectURL(file)
+                };
+                
+                uploadedFiles.push(fileData);
+                updateUploadedFilesList();
+            }
+        }
+        
+        // فرمت سایز فایل
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // به‌روزرسانی لیست فایل‌های آپلود شده
+        function updateUploadedFilesList() {
+            const container = document.getElementById('uploadedFiles');
+            container.innerHTML = '';
+            
+            uploadedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div>
+                        <div class="file-name">
+                            <i class="fas fa-file" style="margin-left: 5px;"></i>
+                            ${file.name}
+                        </div>
+                        <div class="file-size">${file.size}</div>
+                    </div>
+                    <button onclick="removeFile(${index})" style="background: none; border: none; color: #ff4757; cursor: pointer;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                container.appendChild(fileItem);
+            });
+        }
+        
+        // حذف فایل
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            updateUploadedFilesList();
+        }
+        
+        // اضافه کردن ری‌اکشن
+        function addReaction(messageId, reaction) {
+            const messages = JSON.parse(localStorage.getItem('moon_messages') || '[]');
+            const message = messages.find(msg => msg.id == messageId);
+            
+            if (message) {
+                if (!message.reactions) message.reactions = {};
+                if (!message.reactions[reaction]) message.reactions[reaction] = 0;
+                message.reactions[reaction]++;
+                
+                localStorage.setItem('moon_messages', JSON.stringify(messages));
+                loadMessages();
+            }
+        }
+        
+        // اضافه کردن پاسخ
+        function addReply(messageId, replyText) {
+            const messages = JSON.parse(localStorage.getItem('moon_messages') || '[]');
+            const message = messages.find(msg => msg.id == messageId);
+            
+            if (message) {
+                if (!message.replies) message.replies = [];
+                message.replies.push({
+                    text: replyText,
+                    device_id: myDeviceId,
+                    time: new Date().toLocaleTimeString('fa-IR')
+                });
+                
+                localStorage.setItem('moon_messages', JSON.stringify(messages));
+                loadMessages();
+            }
+        }
+        
+        // اجرای کد
+        function runCode(messageId) {
+            const message = messagesData.find(msg => msg.id == messageId);
+            if (!message) return;
+            
+            if (message.language === 'html') {
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(message.text);
+                newWindow.document.close();
+            } else {
+                showNotification(`اجرای کد ${message.language} در مرورگر امکان‌پذیر نیست`, 'error');
+            }
+        }
+        
         // دریافت پیام‌های جدید
         async function loadMessages() {
             try {
-                const messages = getMessages();
+                const searchQuery = document.getElementById('searchInput').value;
+                const messages = searchQuery ? searchMessages(searchQuery) : getMessages();
                 const activeDevices = getActiveDevices();
                 const stats = getStats();
                 
-                // ذخیره داده‌ها برای استفاده در مودال
                 messagesData = messages;
                 
                 if (messages.length > 0) {
@@ -999,22 +1316,69 @@ print("Hello, Moon!")'
                         const isCode = msg.is_code;
                         const preview = msg.text.length > 200 ? msg.text.substring(0, 200) + '...' : msg.text;
                         
+                        let filesHtml = '';
+                        if (msg.files && msg.files.length > 0) {
+                            filesHtml = msg.files.map(file => `
+                                <div class="file-item">
+                                    <div>
+                                        <div class="file-name">
+                                            <i class="fas fa-file" style="margin-left: 5px;"></i>
+                                            ${file.name}
+                                        </div>
+                                        <div class="file-size">${file.size}</div>
+                                    </div>
+                                    <a href="${file.url}" download="${file.name}" style="color: #a0a0ff;">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </div>
+                            `).join('');
+                        }
+                        
+                        let repliesHtml = '';
+                        if (msg.replies && msg.replies.length > 0) {
+                            repliesHtml = `
+                                <div class="reply-section">
+                                    ${msg.replies.map(reply => `
+                                        <div class="reply-message">
+                                            <strong>کاربر ${reply.device_id}:</strong> ${reply.text}
+                                            <div class="message-time">${reply.time}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                        }
+                        
+                        let reactionsHtml = '';
+                        if (msg.reactions && Object.keys(msg.reactions).length > 0) {
+                            reactionsHtml = `
+                                <div class="reaction-buttons">
+                                    ${Object.entries(msg.reactions).map(([reaction, count]) => `
+                                        <div class="reaction-btn">
+                                            ${reaction} ${count}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                        }
+                        
                         messageCard.innerHTML = `
                             <div class="device-badge">
                                 <i class="fas fa-user" style="margin-left: 5px;"></i>
-                                برنامه‌نویس ${msg.device_id.substr(-6)}
+                                کاربر ${msg.device_id}
                                 ${isCode ? '<span class="code-indicator">کد</span>' : ''}
                                 ${isCode && msg.language ? `<span class="language-badge">${msg.language}</span>` : ''}
                             </div>
                             <div class="message-text ${isCode ? 'code-preview' : ''}">${escapeHtml(preview)}</div>
+                            ${filesHtml}
                             <div class="message-time">
                                 <i class="fas fa-clock" style="margin-left: 5px;"></i>
                                 ${msg.time}
                                 ${isCode ? `<span style="color: #27ae60; margin-right: 5px;">• ${msg.line_count} خط</span>` : ''}
                                 ${msg.char_count ? `<span style="color: #3498db; margin-right: 5px;">• ${msg.char_count} کاراکتر</span>` : ''}
                             </div>
-                            ${isCode ? `
+                            ${reactionsHtml}
                             <div class="action-buttons">
+                                ${isCode ? `
                                 <button class="open-code-btn" onclick="showCodeModal('${msg.id}')">
                                     <i class="fas fa-expand"></i>
                                     نمایش کامل
@@ -1023,6 +1387,7 @@ print("Hello, Moon!")'
                                     <i class="fas fa-play"></i>
                                     اجرای کد
                                 </button>
+                                ` : ''}
                                 <button class="share-code-btn" onclick="shareCode('${msg.id}')">
                                     <i class="fas fa-share"></i>
                                     اشتراک‌گذاری
@@ -1031,8 +1396,15 @@ print("Hello, Moon!")'
                                     <i class="fas fa-bookmark"></i>
                                     ذخیره
                                 </button>
+                                <button class="react-btn" onclick="addReaction('${msg.id}', '👍')">
+                                    <i class="fas fa-thumbs-up"></i>
+                                </button>
+                                <button class="reply-btn" onclick="promptReply('${msg.id}')">
+                                    <i class="fas fa-reply"></i>
+                                    پاسخ
+                                </button>
                             </div>
-                            ` : ''}
+                            ${repliesHtml}
                         `;
                         messagesList.appendChild(messageCard);
                     });
@@ -1056,6 +1428,7 @@ print("Hello, Moon!")'
                             <div>
                                 <i class="fas fa-user" style="margin-left: 5px;"></i>
                                 ${deviceInfo.username}
+                                ${deviceInfo.isTyping ? '<small style="color: #a0a0ff;">(در حال تایپ...)</small>' : ''}
                             </div>
                             <span style="font-size: 10px; color: #a0a0ff;">
                                 ${deviceInfo.time}
@@ -1067,7 +1440,6 @@ print("Hello, Moon!")'
                     devicesList.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 10px;">هیچ کاربر آنلاینی وجود ندارد</div>';
                 }
                 
-                // به‌روزرسانی کدهای ذخیره شده
                 updateSavedCodes();
                 
             } catch (error) {
@@ -1084,27 +1456,20 @@ print("Hello, Moon!")'
             }
             
             currentCodeId = messageId;
-            const lines = message.text.split('\n');
             const codeContent = document.getElementById('codeContent');
             const codeTitle = document.getElementById('codeTitle');
+            const codeElement = document.getElementById('codeElement');
             
-            codeTitle.textContent = `کد ${message.language || 'برنامه‌نویسی'} - برنامه‌نویس ${message.device_id.substr(-6)} (${lines.length} خط)`;
+            codeTitle.textContent = `کد ${message.language || 'برنامه‌نویسی'} - کاربر ${message.device_id}`;
+            codeElement.textContent = message.text;
+            codeElement.className = `language-${message.language || 'javascript'}`;
             
-            let codeHTML = '';
-            lines.forEach((line, index) => {
-                codeHTML += `
-                    <div class="code-line">
-                        <div class="line-number">${index + 1}</div>
-                        <div class="line-content">${escapeHtml(line)}</div>
-                    </div>
-                `;
-            });
+            // هایلایت کد
+            Prism.highlightElement(codeElement);
             
-            codeContent.innerHTML = codeHTML;
             document.getElementById('codeModal').style.display = 'block';
             document.getElementById('copySuccess').style.display = 'none';
             
-            // ذخیره داده‌های کد برای کپی
             window.currentCode = message.text;
             window.currentLanguage = message.language;
         }
@@ -1127,7 +1492,6 @@ print("Hello, Moon!")'
                 }, 3000);
             }).catch(err => {
                 console.error('خطا در کپی کردن:', err);
-                // روش fallback
                 const textArea = document.createElement('textarea');
                 textArea.value = window.currentCode;
                 document.body.appendChild(textArea);
@@ -1141,19 +1505,6 @@ print("Hello, Moon!")'
                     copySuccess.style.display = 'none';
                 }, 3000);
             });
-        }
-        
-        // اجرای کد
-        function runCode(messageId) {
-            const message = messagesData.find(msg => msg.id == messageId);
-            if (!message) return;
-            
-            showNotification(`اجرای کد ${message.language || ''} در حال آماده‌سازی...`);
-        }
-        
-        function runCurrentCode() {
-            if (!currentCodeId) return;
-            runCode(currentCodeId);
         }
         
         // اشتراک‌گذاری کد
@@ -1170,6 +1521,11 @@ print("Hello, Moon!")'
         function shareCurrentCode() {
             if (!currentCodeId) return;
             shareCode(currentCodeId);
+        }
+        
+        function runCurrentCode() {
+            if (!currentCodeId) return;
+            runCode(currentCodeId);
         }
         
         // ذخیره کد
@@ -1195,6 +1551,14 @@ print("Hello, Moon!")'
                 updateSavedCodes();
             } else {
                 showNotification('این کد قبلاً ذخیره شده است!', 'error');
+            }
+        }
+        
+        // درخواست پاسخ
+        function promptReply(messageId) {
+            const replyText = prompt('پاسخ خود را وارد کنید:');
+            if (replyText && replyText.trim()) {
+                addReply(messageId, replyText.trim());
             }
         }
         
@@ -1238,20 +1602,23 @@ print("Hello, Moon!")'
             
             const messageText = document.getElementById('message').value;
             
-            if (!messageText.trim()) {
-                showNotification('لطفاً پیام یا کدی وارد کنید!', 'error');
+            if (!messageText.trim() && uploadedFiles.length === 0) {
+                showNotification('لطفاً پیام یا فایلی وارد کنید!', 'error');
                 return;
             }
             
             try {
                 // ذخیره پیام
-                const newMessage = saveMessage(messageText, myDeviceId);
+                const newMessage = saveMessage(messageText, myDeviceId, uploadedFiles);
                 
                 // ثبت دستگاه
                 registerDevice();
+                setTypingStatus(false);
                 
-                // پاک کردن فیلد
+                // پاک کردن فیلدها
                 document.getElementById('message').value = '';
+                uploadedFiles = [];
+                updateUploadedFilesList();
                 
                 // بارگذاری مجدد پیام‌ها
                 await loadMessages();
@@ -1264,38 +1631,50 @@ print("Hello, Moon!")'
             }
         });
         
-        // مقداردهی اولیه
-        document.addEventListener('DOMContentLoaded', function() {
-            // ایجاد ستاره‌ها
-            createStars();
-            
-            // تولید یا بازیابی شناسه دستگاه
-            myDeviceId = localStorage.getItem('moon_device_id');
-            if (!myDeviceId) {
-                myDeviceId = generateDeviceId();
-                localStorage.setItem('moon_device_id', myDeviceId);
+        // جستجوی پیام‌ها
+        document.getElementById('searchInput').addEventListener('input', function() {
+            loadMessages();
+        });
+        
+        // کلیدهای میانبر
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + Enter برای ارسال
+            if (e.ctrlKey && e.key === 'Enter') {
+                document.getElementById('messageForm').dispatchEvent(new Event('submit'));
             }
             
-            document.getElementById('myDeviceId').textContent = myDeviceId.substr(-6);
+            // Escape برای بستن مودال
+            if (e.key === 'Escape') {
+                closeCodeModal();
+            }
             
-            // ثبت دستگاه
+            // Ctrl + K برای جستجو
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+        
+        // مقداردهی اولیه
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            
+            myDeviceId = localStorage.getItem('moon_device_id');
+            if (!myDeviceId) {
+                myDeviceId = Math.floor(Math.random() * 1000) + 1;
+                localStorage.setItem('moon_device_id', myDeviceId);
+                userCounter = myDeviceId;
+            } else {
+                userCounter = parseInt(myDeviceId);
+            }
+            
+            document.getElementById('myDeviceId').textContent = myDeviceId;
+            
             registerDevice();
-            
-            // بارگذاری اولیه پیام‌ها
             loadMessages();
             
-            // رفرش خودکار هر ۳ ثانیه
             setInterval(loadMessages, 3000);
-            
-            // ثبت دستگاه هر 30 ثانیه
             setInterval(registerDevice, 30000);
-            
-            // بستن مودال با ESC یا کلیک خارج
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeCodeModal();
-                }
-            });
             
             document.getElementById('codeModal').addEventListener('click', function(e) {
                 if (e.target === this) {
