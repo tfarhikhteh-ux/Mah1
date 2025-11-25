@@ -345,7 +345,7 @@
             flex-wrap: wrap;
         }
         
-        .open-code-btn, .run-code-btn, .share-code-btn, .save-code-btn, .reply-btn, .react-btn {
+        .open-code-btn, .share-code-btn, .save-code-btn, .reply-btn, .react-btn {
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
             border: none;
@@ -357,10 +357,6 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-        }
-        
-        .run-code-btn {
-            background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
         }
         
         .share-code-btn {
@@ -379,7 +375,7 @@
             background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
         }
         
-        .open-code-btn:hover, .run-code-btn:hover, .share-code-btn:hover, 
+        .open-code-btn:hover, .share-code-btn:hover, 
         .save-code-btn:hover, .reply-btn:hover, .react-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
@@ -456,7 +452,7 @@
             flex-wrap: wrap;
         }
 
-        .copy-btn, .run-modal-btn, .share-modal-btn {
+        .copy-btn, .share-modal-btn {
             background: #2ed573;
             color: white;
             border: none;
@@ -470,20 +466,12 @@
             gap: 5px;
         }
         
-        .run-modal-btn {
-            background: #3498db;
-        }
-        
         .share-modal-btn {
             background: #9b59b6;
         }
 
         .copy-btn:hover {
             background: #27ae60;
-        }
-        
-        .run-modal-btn:hover {
-            background: #2980b9;
         }
         
         .share-modal-btn:hover {
@@ -911,10 +899,6 @@
                     <i class="fas fa-copy" style="margin-left: 5px;"></i>
                     کپی تمام کد
                 </button>
-                <button class="run-modal-btn" onclick="runCurrentCode()">
-                    <i class="fas fa-play" style="margin-left: 5px;"></i>
-                    اجرای کد
-                </button>
                 <button class="share-modal-btn" onclick="shareCurrentCode()">
                     <i class="fas fa-share" style="margin-left: 5px;"></i>
                     اشتراک‌گذاری
@@ -993,70 +977,20 @@
             }
         }
         
-        // تشخیص کد بر اساس محتوا
+        // تشخیص کد بر اساس کوتیشن‌ها
         function detectCode(messageText) {
-            const codePatterns = [
-                /function\s+\w+\s*\([^)]*\)\s*\{/,
-                /class\s+\w+/,
-                /def\s+\w+\s*\([^)]*\):/,
-                /import\s+\w+/,
-                /console\.log\(/,
-                /print\(/,
-                /if\s*\([^)]*\)\s*\{/,
-                /for\s*\([^)]*\)\s*\{/,
-                /while\s*\([^)]*\)\s*\{/,
-                /const\s+\w+\s*=/,
-                /let\s+\w+\s*=/,
-                /var\s+\w+\s*=/,
-                /<\/?[a-z][\s\S]*>/i,
-                /\/\//,
-                /\/\*[\s\S]*\*\//,
-                /#include/,
-                /public\s+class/,
-                /private\s+\w+/,
-                /protected\s+\w+/
-            ];
+            // شمارش تعداد کوتیشن‌های دوتایی و تکی
+            const doubleQuotes = (messageText.match(/"/g) || []).length;
+            const singleQuotes = (messageText.match(/'/g) || []).length;
+            const totalQuotes = doubleQuotes + singleQuotes;
             
-            for (let pattern of codePatterns) {
-                if (pattern.test(messageText)) {
-                    return true;
-                }
-            }
-            
-            const lines = messageText.split('\n');
-            let codeLineCount = 0;
-            
-            for (let line of lines) {
-                const trimmedLine = line.trim();
-                if (trimmedLine.length > 0) {
-                    if (trimmedLine.endsWith(';') || 
-                        trimmedLine.endsWith('{') || 
-                        trimmedLine.endsWith('}') ||
-                        trimmedLine.endsWith(')') ||
-                        /^\s*[\w]+\s*\([^)]*\)\s*$/.test(trimmedLine)) {
-                        codeLineCount++;
-                    }
-                }
-            }
-            
-            return codeLineCount / lines.length > 0.3 && lines.length > 2;
+            // اگر تعداد کوتیشن‌ها بیشتر از ۲ باشد و حداقل ۱۰ کاراکتر داشته باشد
+            return totalQuotes >= 2 && messageText.length >= 10;
         }
         
-        // تشخیص زبان کد
+        // تشخیص زبان کد (ساده‌تر شده)
         function detectLanguage(messageText) {
-            if (messageText.includes('def ') || messageText.includes('import ') || messageText.includes('print(')) {
-                return 'python';
-            } else if (messageText.includes('function ') || messageText.includes('const ') || messageText.includes('let ')) {
-                return 'javascript';
-            } else if (messageText.includes('<html') || messageText.includes('<div') || messageText.includes('</')) {
-                return 'html';
-            } else if (messageText.includes('#include') || messageText.includes('int main')) {
-                return 'cpp';
-            } else if (messageText.includes('public class') || messageText.includes('System.out')) {
-                return 'java';
-            } else {
-                return 'javascript';
-            }
+            return 'text'; // همیشه به عنوان متن شناسایی شود
         }
         
         // ثبت دستگاه فعال
@@ -1132,7 +1066,7 @@
             const now = new Date();
             
             const isCode = detectCode(messageText);
-            const language = isCode ? detectLanguage(messageText) : 'text';
+            const language = 'text'; // همیشه متن
             const lineCount = messageText.split('\n').length;
             
             const newMessage = {
@@ -1281,20 +1215,6 @@
             }
         }
         
-        // اجرای کد
-        function runCode(messageId) {
-            const message = messagesData.find(msg => msg.id == messageId);
-            if (!message) return;
-            
-            if (message.language === 'html') {
-                const newWindow = window.open('', '_blank');
-                newWindow.document.write(message.text);
-                newWindow.document.close();
-            } else {
-                showNotification(`اجرای کد ${message.language} در مرورگر امکان‌پذیر نیست`, 'error');
-            }
-        }
-        
         // دریافت پیام‌های جدید
         async function loadMessages() {
             try {
@@ -1366,7 +1286,6 @@
                                 <i class="fas fa-user" style="margin-left: 5px;"></i>
                                 کاربر ${msg.device_id}
                                 ${isCode ? '<span class="code-indicator">کد</span>' : ''}
-                                ${isCode && msg.language ? `<span class="language-badge">${msg.language}</span>` : ''}
                             </div>
                             <div class="message-text ${isCode ? 'code-preview' : ''}">${escapeHtml(preview)}</div>
                             ${filesHtml}
@@ -1382,10 +1301,6 @@
                                 <button class="open-code-btn" onclick="showCodeModal('${msg.id}')">
                                     <i class="fas fa-expand"></i>
                                     نمایش کامل
-                                </button>
-                                <button class="run-code-btn" onclick="runCode('${msg.id}')">
-                                    <i class="fas fa-play"></i>
-                                    اجرای کد
                                 </button>
                                 ` : ''}
                                 <button class="share-code-btn" onclick="shareCode('${msg.id}')">
@@ -1460,9 +1375,9 @@
             const codeTitle = document.getElementById('codeTitle');
             const codeElement = document.getElementById('codeElement');
             
-            codeTitle.textContent = `کد ${message.language || 'برنامه‌نویسی'} - کاربر ${message.device_id}`;
+            codeTitle.textContent = `کد - کاربر ${message.device_id}`;
             codeElement.textContent = message.text;
-            codeElement.className = `language-${message.language || 'javascript'}`;
+            codeElement.className = `language-javascript`;
             
             // هایلایت کد
             Prism.highlightElement(codeElement);
@@ -1471,7 +1386,7 @@
             document.getElementById('copySuccess').style.display = 'none';
             
             window.currentCode = message.text;
-            window.currentLanguage = message.language;
+            window.currentLanguage = 'text';
         }
         
         // بستن مودال کد
@@ -1523,11 +1438,6 @@
             shareCode(currentCodeId);
         }
         
-        function runCurrentCode() {
-            if (!currentCodeId) return;
-            runCode(currentCodeId);
-        }
-        
         // ذخیره کد
         function saveCode(messageId) {
             const message = messagesData.find(msg => msg.id == messageId);
@@ -1541,7 +1451,7 @@
                     id: messageId,
                     text: message.text,
                     time: message.time,
-                    language: message.language,
+                    language: 'text',
                     preview: message.text.substring(0, 100) + (message.text.length > 100 ? '...' : '')
                 });
                 
@@ -1577,7 +1487,7 @@
                     const codeItem = document.createElement('div');
                     codeItem.className = 'saved-code-item';
                     codeItem.innerHTML = `
-                        <div style="font-weight: bold; margin-bottom: 5px;">${code.language || 'کد'} - ${code.time}</div>
+                        <div style="font-weight: bold; margin-bottom: 5px;">کد - ${code.time}</div>
                         <div style="font-size: 11px; opacity: 0.8; margin-bottom: 8px;">${code.preview}...</div>
                         <button class="open-code-btn" style="font-size: 10px; padding: 4px 8px;" onclick="showCodeModal('${code.id}')">
                             <i class="fas fa-eye"></i>
