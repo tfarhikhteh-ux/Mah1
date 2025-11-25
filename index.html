@@ -111,13 +111,6 @@
             letter-spacing: 3px;
         }
         
-        .tagline {
-            font-size: 1.2rem;
-            color: #a0a0ff;
-            margin-top: 5px;
-            opacity: 0.9;
-        }
-        
         .content {
             display: grid;
             grid-template-columns: 320px 1fr 320px;
@@ -720,6 +713,67 @@
             font-family: 'Courier New', monospace;
             font-size: 13px;
         }
+        
+        /* استایل‌های ضبط صدا */
+        .voice-recorder {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .btn-record {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-record:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-record.recording {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .recording-status {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #a0a0ff;
+            display: none;
+        }
+        
+        .audio-message {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .audio-player {
+            width: 100%;
+            margin-top: 5px;
+        }
+        
+        .audio-duration {
+            font-size: 11px;
+            color: #a0a0ff;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -738,7 +792,6 @@
                 <div class="moon"></div>
             </div>
             <div class="moon-title">ماه</div>
-            <div class="tagline">پیام‌رسان آنلاین</div>
         </div>
         
         <!-- محتوای اصلی -->
@@ -765,14 +818,14 @@
                     </div>
                     <div class="stat-item">
                         <div class="stat-value" id="onlineUsers">0</div>
-                        <div class="stat-label">کاربر آنلاین</div>
+                        <div class="stat-label">کاربر فعال</div>
                     </div>
                 </div>
                 
                 <div class="active-devices">
                     <h4 style="margin: 20px 0 10px; color: #a0a0ff;">
                         <i class="fas fa-users" style="margin-left: 8px;"></i>
-                        کاربران آنلاین <span class="online-indicator"></span>
+                        کاربران فعال
                     </h4>
                     <div id="devicesList">
                         <div class="loading">
@@ -820,6 +873,19 @@
                     ارسال پیام
                 </h3>
                 
+                <!-- ضبط صدا -->
+                <div class="voice-recorder">
+                    <button id="recordButton" class="btn-record">
+                        <i class="fas fa-microphone"></i>
+                        شروع ضبط صدا
+                    </button>
+                    <div class="recording-status" id="recordingStatus">
+                        <i class="fas fa-circle" style="color: #e74c3c; margin-left: 5px;"></i>
+                        در حال ضبط... 
+                        <span id="recordingTime">0:00</span>
+                    </div>
+                </div>
+                
                 <div class="file-upload" onclick="document.getElementById('fileInput').click()">
                     <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; margin-bottom: 10px;"></i>
                     <div>برای آپلود فایل کلیک کنید</div>
@@ -839,7 +905,6 @@
                             id="message"
                             name="message" 
                             placeholder="پیام خود را اینجا بنویسید..."
-                            required
                             oninput="handleTyping()"
                         ></textarea>
                     </div>
@@ -858,11 +923,11 @@
                 <div class="saved-codes">
                     <h4 style="margin: 20px 0 10px; color: #a0a0ff;">
                         <i class="fas fa-bookmark" style="margin-left: 8px;"></i>
-                        کدهای ذخیره شده
+                        متن‌های ذخیره شده
                     </h4>
                     <div id="savedCodesList">
                         <div style="text-align: center; color: rgba(255,255,255,0.5); padding: 10px; font-size: 12px;">
-                            کد ذخیره شده‌ای ندارید
+                            متنی ذخیره نشده است
                         </div>
                     </div>
                 </div>
@@ -883,7 +948,7 @@
     <div id="codeModal" class="code-modal">
         <div class="code-container">
             <div class="code-header">
-                <div class="code-title" id="codeTitle">نمایش کد</div>
+                <div class="code-title" id="codeTitle">نمایش متن</div>
                 <button class="code-close" onclick="closeCodeModal()">
                     <i class="fas fa-times" style="margin-left: 5px;"></i>
                     بستن
@@ -891,13 +956,13 @@
             </div>
             <div class="code-content" id="codeContent">
                 <div class="code-block">
-                    <pre><code class="language-javascript" id="codeElement">// کد شما اینجا نمایش داده خواهد شد</code></pre>
+                    <pre><code class="language-javascript" id="codeElement">// متن شما اینجا نمایش داده خواهد شد</code></pre>
                 </div>
             </div>
             <div class="code-actions">
                 <button class="copy-btn" onclick="copyAllCode()">
                     <i class="fas fa-copy" style="margin-left: 5px;"></i>
-                    کپی تمام کد
+                    کپی تمام متن
                 </button>
                 <button class="share-modal-btn" onclick="shareCurrentCode()">
                     <i class="fas fa-share" style="margin-left: 5px;"></i>
@@ -921,6 +986,13 @@
         let currentTheme = 'dark';
         let typingTimer = null;
         let uploadedFiles = [];
+        
+        // متغیرهای ضبط صدا
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecording = false;
+        let recordingStartTime = null;
+        let recordingTimer = null;
         
         // ایجاد ستاره‌های متحرک
         function createStars() {
@@ -988,18 +1060,13 @@
             return totalQuotes >= 2 && messageText.length >= 10;
         }
         
-        // تشخیص زبان کد (ساده‌تر شده)
-        function detectLanguage(messageText) {
-            return 'text'; // همیشه به عنوان متن شناسایی شود
-        }
-        
         // ثبت دستگاه فعال
         function registerDevice() {
             if (!myDeviceId) return;
             
             const deviceData = {
                 device_id: myDeviceId,
-                username: `کاربر ${userCounter}`,
+                username: `کاربر ${myDeviceId}`,
                 timestamp: Date.now(),
                 isTyping: false
             };
@@ -1061,12 +1128,12 @@
         }
         
         // ذخیره پیام
-        function saveMessage(messageText, deviceId, files = []) {
+        function saveMessage(messageText, deviceId, files = [], audio = null) {
             const messages = JSON.parse(localStorage.getItem('moon_messages') || '[]');
             const now = new Date();
             
             const isCode = detectCode(messageText);
-            const language = 'text'; // همیشه متن
+            const language = 'text';
             const lineCount = messageText.split('\n').length;
             
             const newMessage = {
@@ -1080,6 +1147,7 @@
                 language: language,
                 timestamp: now.getTime(),
                 files: files,
+                audio: audio,
                 reactions: {},
                 replies: []
             };
@@ -1215,6 +1283,99 @@
             }
         }
         
+        // شروع ضبط صدا
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    // ذخیره فایل صوتی
+                    const audioFile = {
+                        name: `voice_message_${Date.now()}.wav`,
+                        size: formatFileSize(audioBlob.size),
+                        type: 'audio/wav',
+                        url: audioUrl,
+                        duration: Math.floor((Date.now() - recordingStartTime) / 1000)
+                    };
+                    
+                    uploadedFiles.push(audioFile);
+                    updateUploadedFilesList();
+                    
+                    // توقف استریم
+                    stream.getTracks().forEach(track => track.stop());
+                };
+                
+                mediaRecorder.start();
+                isRecording = true;
+                recordingStartTime = Date.now();
+                
+                // به‌روزرسانی UI
+                const recordButton = document.getElementById('recordButton');
+                const recordingStatus = document.getElementById('recordingStatus');
+                
+                recordButton.innerHTML = '<i class="fas fa-stop"></i> توقف ضبط';
+                recordButton.classList.add('recording');
+                recordingStatus.style.display = 'block';
+                
+                // شروع تایمر
+                startRecordingTimer();
+                
+            } catch (error) {
+                console.error('خطا در دسترسی به میکروفون:', error);
+                showNotification('دسترسی به میکروفون امکان‌پذیر نیست!', 'error');
+            }
+        }
+        
+        // توقف ضبط صدا
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                // توقف تایمر
+                clearInterval(recordingTimer);
+                
+                // به‌روزرسانی UI
+                const recordButton = document.getElementById('recordButton');
+                const recordingStatus = document.getElementById('recordingStatus');
+                
+                recordButton.innerHTML = '<i class="fas fa-microphone"></i> شروع ضبط صدا';
+                recordButton.classList.remove('recording');
+                recordingStatus.style.display = 'none';
+            }
+        }
+        
+        // شروع تایمر ضبط
+        function startRecordingTimer() {
+            recordingTimer = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                document.getElementById('recordingTime').textContent = 
+                    `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }, 1000);
+        }
+        
+        // مدیریت کلیک روی دکمه ضبط
+        document.getElementById('recordButton').addEventListener('click', function() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        });
+        
         // دریافت پیام‌های جدید
         async function loadMessages() {
             try {
@@ -1254,6 +1415,26 @@
                             `).join('');
                         }
                         
+                        // نمایش پیام صوتی
+                        let audioHtml = '';
+                        if (msg.audio) {
+                            audioHtml = `
+                                <div class="audio-message">
+                                    <div style="font-size: 12px; color: #a0a0ff; margin-bottom: 5px;">
+                                        <i class="fas fa-microphone" style="margin-left: 5px;"></i>
+                                        پیام صوتی
+                                    </div>
+                                    <audio controls class="audio-player">
+                                        <source src="${msg.audio.url}" type="audio/wav">
+                                        مرورگر شما از پخش صدا پشتیبانی نمی‌کند.
+                                    </audio>
+                                    <div class="audio-duration">
+                                        مدت: ${msg.audio.duration} ثانیه
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        
                         let repliesHtml = '';
                         if (msg.replies && msg.replies.length > 0) {
                             repliesHtml = `
@@ -1287,7 +1468,8 @@
                                 کاربر ${msg.device_id}
                                 ${isCode ? '<span class="code-indicator">کد</span>' : ''}
                             </div>
-                            <div class="message-text ${isCode ? 'code-preview' : ''}">${escapeHtml(preview)}</div>
+                            ${msg.text ? `<div class="message-text ${isCode ? 'code-preview' : ''}">${escapeHtml(preview)}</div>` : ''}
+                            ${audioHtml}
                             ${filesHtml}
                             <div class="message-time">
                                 <i class="fas fa-clock" style="margin-left: 5px;"></i>
@@ -1352,7 +1534,7 @@
                         devicesList.appendChild(deviceItem);
                     });
                 } else {
-                    devicesList.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 10px;">هیچ کاربر آنلاینی وجود ندارد</div>';
+                    devicesList.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 10px;">هیچ کاربر فعالی وجود ندارد</div>';
                 }
                 
                 updateSavedCodes();
@@ -1375,7 +1557,7 @@
             const codeTitle = document.getElementById('codeTitle');
             const codeElement = document.getElementById('codeElement');
             
-            codeTitle.textContent = `کد - کاربر ${message.device_id}`;
+            codeTitle.textContent = `متن - کاربر ${message.device_id}`;
             codeElement.textContent = message.text;
             codeElement.className = `language-javascript`;
             
@@ -1429,7 +1611,7 @@
             
             const shareUrl = `${window.location.origin}/code/${messageId}`;
             navigator.clipboard.writeText(shareUrl).then(() => {
-                showNotification('لینک کد در حافظه کلیپ‌بورد کپی شد!');
+                showNotification('لینک متن در حافظه کلیپ‌بورد کپی شد!');
             });
         }
         
@@ -1457,10 +1639,10 @@
                 
                 savedCodes[myDeviceId] = userCodes;
                 localStorage.setItem('moon_saved_codes', JSON.stringify(savedCodes));
-                showNotification('کد با موفقیت ذخیره شد!');
+                showNotification('متن با موفقیت ذخیره شد!');
                 updateSavedCodes();
             } else {
-                showNotification('این کد قبلاً ذخیره شده است!', 'error');
+                showNotification('این متن قبلاً ذخیره شده است!', 'error');
             }
         }
         
@@ -1481,13 +1663,13 @@
             savedCodesList.innerHTML = '';
             
             if (userCodes.length === 0) {
-                savedCodesList.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 10px; font-size: 12px;">کد ذخیره شده‌ای ندارید</div>';
+                savedCodesList.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 10px; font-size: 12px;">متن ذخیره شده‌ای ندارید</div>';
             } else {
                 userCodes.forEach(code => {
                     const codeItem = document.createElement('div');
                     codeItem.className = 'saved-code-item';
                     codeItem.innerHTML = `
-                        <div style="font-weight: bold; margin-bottom: 5px;">کد - ${code.time}</div>
+                        <div style="font-weight: bold; margin-bottom: 5px;">متن - ${code.time}</div>
                         <div style="font-size: 11px; opacity: 0.8; margin-bottom: 8px;">${code.preview}...</div>
                         <button class="open-code-btn" style="font-size: 10px; padding: 4px 8px;" onclick="showCodeModal('${code.id}')">
                             <i class="fas fa-eye"></i>
@@ -1511,15 +1693,16 @@
             e.preventDefault();
             
             const messageText = document.getElementById('message').value;
+            const audioFile = uploadedFiles.find(file => file.type === 'audio/wav');
             
-            if (!messageText.trim() && uploadedFiles.length === 0) {
-                showNotification('لطفاً پیام یا فایلی وارد کنید!', 'error');
+            if (!messageText.trim() && uploadedFiles.length === 0 && !audioFile) {
+                showNotification('لطفاً پیام، فایل یا صوت وارد کنید!', 'error');
                 return;
             }
             
             try {
                 // ذخیره پیام
-                const newMessage = saveMessage(messageText, myDeviceId, uploadedFiles);
+                const newMessage = saveMessage(messageText, myDeviceId, uploadedFiles.filter(file => file.type !== 'audio/wav'), audioFile);
                 
                 // ثبت دستگاه
                 registerDevice();
@@ -1571,11 +1754,10 @@
             
             myDeviceId = localStorage.getItem('moon_device_id');
             if (!myDeviceId) {
-                myDeviceId = Math.floor(Math.random() * 1000) + 1;
+                myDeviceId = 1;
                 localStorage.setItem('moon_device_id', myDeviceId);
-                userCounter = myDeviceId;
             } else {
-                userCounter = parseInt(myDeviceId);
+                myDeviceId = parseInt(myDeviceId);
             }
             
             document.getElementById('myDeviceId').textContent = myDeviceId;
