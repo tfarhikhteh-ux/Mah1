@@ -916,7 +916,7 @@
                 
                 <div style="margin-top: 15px; font-size: 12px; color: #a0a0ff;">
                     <i class="fas fa-user" style="margin-left: 5px;"></i>
-                    شما: کاربر <span id="myDeviceId">1</span>
+                    شما: <span id="myDeviceId">کاربر ۱</span>
                     <span class="online-indicator"></span>
                 </div>
                 
@@ -1752,19 +1752,24 @@
         document.addEventListener('DOMContentLoaded', function() {
             createStars();
             
-            myDeviceId = localStorage.getItem('moon_device_id');
-            if (!myDeviceId) {
-                myDeviceId = 1;
-                localStorage.setItem('moon_device_id', myDeviceId);
-            } else {
-                myDeviceId = parseInt(myDeviceId);
+            // تعیین شناسه دستگاه به صورت ترتیبی
+            let deviceId = localStorage.getItem('moon_device_id');
+            if (!deviceId) {
+                // پیدا کردن آخرین شناسه دستگاه
+                const devices = JSON.parse(localStorage.getItem('moon_active_devices') || '{}');
+                const deviceIds = Object.keys(devices).map(id => parseInt(id));
+                const maxId = deviceIds.length > 0 ? Math.max(...deviceIds) : 0;
+                deviceId = (maxId + 1).toString();
+                localStorage.setItem('moon_device_id', deviceId);
             }
             
-            document.getElementById('myDeviceId').textContent = myDeviceId;
+            myDeviceId = parseInt(deviceId);
+            document.getElementById('myDeviceId').textContent = `کاربر ${myDeviceId}`;
             
             registerDevice();
             loadMessages();
             
+            // رفرش مخفی - بدون بارگذاری مجدد صفحه
             setInterval(loadMessages, 3000);
             setInterval(registerDevice, 30000);
             
